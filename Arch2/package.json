@@ -1,0 +1,10 @@
+{
+  "name": "cache-memory-machine",
+  "version": "1.0.0",
+  "description": "4-Way Block Set Associative Cache Simulator (LRU vs MRU)",
+  "type": "module",
+  "scripts": {
+    "start": "npx serve .",
+    "analyze": "node scripts/runAnalysis.js"
+  }
+}

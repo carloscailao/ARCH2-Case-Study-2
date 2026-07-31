@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cache Memory Machine — 4-Way BSA Simulator</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>Cache Memory Machine</h1>
+      <p class="subtitle">4-Way Block Set Associative Cache — LRU vs MRU</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- Configuration Panel -->
+    <section class="panel config-panel">
+      <h2>Machine Configuration</h2>
+      <div class="config-grid">
+        <div class="field">
+          <label for="blockSize">Block Size (words)</label>
+          <select id="blockSize">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="8" selected>8</option>
+            <option value="16">16</option>
+            <option value="32">32</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="numCacheBlocks">Cache Blocks</label>
+          <select id="numCacheBlocks">
+            <option value="4">4</option>
+            <option value="8">8</option>
+            <option value="16" selected>16</option>
+            <option value="32">32</option>
+            <option value="64">64</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="readPolicy">Read Policy</label>
+          <select id="readPolicy">
+            <option value="non-load-through">Non-Load-Through</option>
+            <option value="load-through">Load-Through</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Main Memory</label>
+          <input type="text" value="1024 blocks (fixed)" disabled />
+        </div>
+        <div class="field">
+          <label>Associativity</label>
+          <input type="text" value="4-Way BSA (fixed)" disabled />
+        </div>
+      </div>
+      <p class="config-summary" id="configSummary"></p>
+    </section>
+
+    <!-- Test Cases & Controls -->
+    <section class="panel controls-panel">
+      <h2>Test Cases</h2>
+      <div class="test-buttons">
+        <button class="btn test-btn" data-test="sequential">Sequential</button>
+        <button class="btn test-btn" data-test="midRepeat">Mid-Repeat</button>
+        <button class="btn test-btn" data-test="random">Random (64)</button>
+      </div>
+      <div class="run-controls">
+        <div class="field inline">
+          <label for="viewMode">View Mode</label>
+          <select id="viewMode">
+            <option value="animated">Step-by-Step Animation</option>
+            <option value="final">Final Snapshot Only</option>
+          </select>
+        </div>
+        <div class="field inline">
+          <label for="animSpeed">Animation Speed (ms)</label>
+          <input type="range" id="animSpeed" min="100" max="2000" value="600" step="100" />
+          <span id="animSpeedLabel">600 ms</span>
+        </div>
+        <button class="btn btn-primary" id="runBothBtn">Run Both Policies</button>
+        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+        <button class="btn btn-secondary" id="stepBtn" disabled>Next Step</button>
+        <button class="btn btn-secondary" id="pauseBtn" disabled>Pause</button>
+      </div>
+      <p class="test-description" id="testDescription">Select a test case to begin simulation.</p>
+    </section>
+
+    <!-- Comparison Layout: LRU vs MRU side by side -->
+    <div class="comparison-grid">
+      <!-- LRU Panel -->
+      <section class="panel cache-panel" id="lruPanel">
+        <div class="panel-header">
+          <h2>4-Way BSA + <span class="policy-tag lru">LRU</span></h2>
+          <span class="status-badge" id="lruStatus">Idle</span>
+        </div>
+        <div class="cache-visual" id="lruCacheVisual"></div>
+        <div class="stats-grid" id="lruStats"></div>
+        <div class="log-container">
+          <h3>Trace Log</h3>
+          <pre class="trace-log" id="lruLog"></pre>
+        </div>
+      </section>
+
+      <!-- MRU Panel -->
+      <section class="panel cache-panel" id="mruPanel">
+        <div class="panel-header">
+          <h2>4-Way BSA + <span class="policy-tag mru">MRU</span></h2>
+          <span class="status-badge" id="mruStatus">Idle</span>
+        </div>
+        <div class="cache-visual" id="mruCacheVisual"></div>
+        <div class="stats-grid" id="mruStats"></div>
+        <div class="log-container">
+          <h3>Trace Log</h3>
+          <pre class="trace-log" id="mruLog"></pre>
+        </div>
+      </section>
+    </div>
+
+    <!-- Comparison Summary -->
+    <section class="panel summary-panel" id="summaryPanel" hidden>
+      <h2>Policy Comparison Summary</h2>
+      <div id="comparisonTable"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Cache Memory Machine Simulator &mdash; Architecture Project</p>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
