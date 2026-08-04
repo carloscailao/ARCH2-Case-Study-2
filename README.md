@@ -225,3 +225,7 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 | Repeated/reverse patterns | MRU | Load-Through |
 | Random/uniform access | Either (no difference) | Load-Through |
 | General-purpose | LRU  | Depends on hardware |
+
+---
+## Video Walkthrough
+https://youtu.be/g6I7iwLIKbU
