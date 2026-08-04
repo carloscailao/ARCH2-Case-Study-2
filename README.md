@@ -114,8 +114,8 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 | Misses | 64 | 48 |
 | Hit Rate | 0.0% | 25.0% |
 | Miss Rate | 100.0% | 75.0% |
-| AMAT (non-load-through) | 12.00 | 9.25 |
-| Total Time (non-load-through) | 768 | 592 |
+| AMAT (cycles) | 20.00 | 15.25 |
+| Total Time (cycles) | 1,280 | 976 |
 
 **Analysis:**
 
@@ -130,12 +130,12 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 
 | Metric | LRU | MRU |
 |--------|-----|-----|
-| Hits | 16 | 68 |
-| Misses | 144 | 92 |
-| Hit Rate | 10.0% | 42.5% |
-| Miss Rate | 90.0% | 57.5% |
-| AMAT (non-load-through) | 10.90 | 7.33 |
-| Total Time (non-load-through) | 1,744 | 1,172 |
+| Hits | 48 | 80 |
+| Misses | 112 | 80 |
+| Hit Rate | 30.0% | 50% |
+| Miss Rate | 70.0% | 50% |
+| AMAT (cycles) | 14.30 | 10.50 |
+| Total Time (cycles) | 2,288 | 1,680 |
 
 **Analysis:**
 
@@ -147,20 +147,45 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 ---
 
 ### Test Case C — Random Sequence (64 accesses)
-
-**Access pattern:** 64 uniformly random block indices in [0, 1023] (seed = 42).
+#### Test 1
+**Access pattern:** 64 uniformly random block indices in [0, 1023].
 
 | Metric | LRU | MRU |
 |--------|-----|-----|
-| Hits | 1 | 1 |
-| Misses | 63 | 63 |
-| Hit Rate | 1.56% | 1.56% |
-| Miss Rate | 98.44% | 98.44% |
-| AMAT (non-load-through) | 11.83 | 11.83 |
-| Total Time (non-load-through) | 757 | 757 |
+| Hits | 1 | 0 |
+| Misses | 63 | 64 |
+| Hit Rate | 1.6% | 0.0% |
+| Miss Rate | 98.4% | 100% |
+| AMAT (cycles) | 19.70 | 20.00 |
+| Total Time (cycles) | 1261 | 1280 |
+
+#### Test 2
+**Access pattern:** 64 uniformly random block indices in [0, 1023].
+
+| Metric | LRU | MRU |
+|--------|-----|-----|
+| Hits | 1 | 2 |
+| Misses | 63 | 62 |
+| Hit Rate | 1.6% | 3.1% |
+| Miss Rate | 98.4% | 96.9% |
+| AMAT (cycles) | 19.70 | 19.41 |
+| Total Time (cycles) | 1261 | 1242 |
+
+#### Test 3
+**Access pattern:** 64 uniformly random block indices in [0, 1023].
+
+| Metric | LRU | MRU |
+|--------|-----|-----|
+| Hits | 0 | 0 |
+| Misses | 64 | 64 |
+| Hit Rate | 0.0% | 0.0% |
+| Miss Rate | 100.0% | 100.0% |
+| AMAT (cycles) | 20.00 | 20.00 |
+| Total Time (cycles) | 1280 | 1280 |
 
 **Analysis:**
-
+- All results of running the random sequence lead to results similar to the tests above.
+- After 30 runs, LRU performed better 9 times, MRU performed better 8 times, and both tied 13 times. 
 - With 1024 memory blocks mapped to only 4 sets (16 cache blocks), random access has **very low locality**. The probability of re-accessing a block still resident in cache is extremely small.
 - **LRU and MRU perform identically**, both achieve only 1 hit in 64 accesses. Since only one cache hit occurred throughout the 64 accesses, there was almost no temporal locality to exploit. As a result, both replacement policies produced identical statistics.
 - **Conclusion:** For random/uniform workloads, **replacement policy choice does not matter**, cache size and the lack of locality have a greater impact than the replacement policy.
@@ -181,9 +206,9 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 
 | Test Case | LRU AMAT (NL/T / LT) | MRU AMAT (NL/T / LT) |
 |-----------|----------------------|----------------------|
-| Sequential | 12.00 / 11.00 | 9.25 / 8.50 |
-| Mid-Repeat | 10.90 / 10.00 | 7.33 / 6.75 |
-| Random | 11.83 / 10.84 | 11.83 / 10.84 |
+| Sequential | 20.00 / 12.00 | 15.25 / 9.25 |
+| Mid-Repeat | 14.30 / 8.70 | 10.5 / 6.50 |
+| Random | 18.81 / 11.83 | 19.11 / 11.83 |
 
 **Analysis:**
 
