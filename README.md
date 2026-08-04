@@ -229,3 +229,23 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 ---
 ## Video Walkthrough
 https://youtu.be/g6I7iwLIKbU
+
+## Snapshots
+<p align="center">
+    <img src="snapshots/snapshot1.png" width="800">
+</p>
+<p align="center">
+    <img src="snapshots/snapshot2.png" width="800">
+</p>
+<p align="center">
+    <img src="snapshots/snapshot3.png" width="800">
+</p>
+<p align="center">
+    <img src="snapshots/snapshot4.png" width="800">
+</p>
+<p align="center">
+    <img src="snapshots/snapshot5.png" width="800">
+</p>
+<p align="center">
+    <img src="snapshots/snapshot6.png" width="800">
+</p>
