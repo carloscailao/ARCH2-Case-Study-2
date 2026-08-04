@@ -55,7 +55,7 @@ export const TEST_CASES = {
     id: 'random',
     name: 'Random',
     description: '64 random block accesses (indices 0–1023).',
-    generate: (n) => randomSequence(64, 1024, 42),
+    generate: (n) => randomSequence(64, 1024),
   },
 };
 
