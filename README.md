@@ -33,7 +33,7 @@ num_sets  = num_cache_blocks / 4
 
 ## Machine Configuration
 
-The default configuration used for analysis in this document:
+The default configuration used for analysis:
 
 | Setting | Default Value |
 |---------|---------------|
@@ -47,7 +47,7 @@ The default configuration used for analysis in this document:
 
 ## How to Run
 
-### Web Simulator (Recommended)
+### Web Simulator
 
 1. Open a terminal in the project directory.
 2. Start a local HTTP server (required for ES module imports):
@@ -119,8 +119,7 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 
 **Analysis:**
 
-- **LRU performs poorly** on pure sequential scans. As the simulator streams through blocks 0, 4, 8, 12, 16, 20, 24, 28 (all mapping to set 0), LRU evicts the oldest entries. When the second pass revisits block 0, it was evicted long ago → **0% hit rate**.
-- **MRU performs better** because evicting the *most recently used* block preserves older entries. On the second pass through blocks 0–15, several blocks remain cached from the first pass, yielding **25% hit rate**.
+- For this configuration, **LRU produced no cache hits during the sequential test, while MRU recorded 16 hits**. Since each set only has four ways but receives eight different blocks during each pass, blocks are continuously replaced before they can be reused
 - **Conclusion:** For sequential/streaming workloads that exceed cache capacity per set, **MRU outperforms LRU**.
 
 ---
@@ -140,11 +139,10 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 
 **Analysis:**
 
-- This test case is designed to expose replacement policy differences under **repeated and reversed access patterns**.
-- **MRU dominates** with 68 hits vs. LRU's 16. The mid-repeat structure re-accesses blocks 0–15 early, then repeats larger patterns. MRU's tendency to keep older blocks aligns well with the repeated sub-sequences.
-- **LRU evicts blocks** that will be needed again soon when the reverse pass (`15, 14, …, 0`) occurs, because recent forward-scanned blocks occupy all ways.
-- **AMAT improvement:** MRU reduces average access time by ~33% (10.90 → 7.33 cycles) compared to LRU.
-- **Conclusion:** Workloads with **repeated working sets** and **reverse scans** strongly favor MRU in this 4-way BSA configuration.
+- **MRU recorded 68 cache hits**, compared to 16 hits for LRU. The repeated forward and reverse access pattern allows older cache entries to remain useful, which benefits MRU's replacement strategy.
+- **LRU replaces blocks that are no longer the most recently used**, causing some blocks needed during the reverse sequence to be evicted before they are accessed again.
+- **AMAT improvement**: MRU reduces the average memory access time from 10.90 cycles to 7.33 cycles, lowering the total memory access time from 1744 cycles to 1172 cycles.
+- **Conclusion:** The **repeated and reverse access pattern** resulted in better performance for **MRU**.
 
 ---
 
@@ -164,8 +162,8 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 **Analysis:**
 
 - With 1024 memory blocks mapped to only 4 sets (16 cache blocks), random access has **very low locality**. The probability of re-accessing a block still resident in cache is extremely small.
-- **LRU and MRU perform identically** — both achieve only 1 hit in 64 accesses. Replacement policy has negligible impact when accesses are uniformly random across a large address space.
-- **Conclusion:** For random/uniform workloads, **replacement policy choice does not matter**; cache size and associativity dominate performance.
+- **LRU and MRU perform identically**, both achieve only 1 hit in 64 accesses. Since only one cache hit occurred throughout the 64 accesses, there was almost no temporal locality to exploit. As a result, both replacement policies produced identical statistics.
+- **Conclusion:** For random/uniform workloads, **replacement policy choice does not matter**, cache size and the lack of locality have a greater impact than the replacement policy.
 
 ---
 
@@ -192,7 +190,7 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 - **Load-Through reduces AMAT by 1 cycle per miss** (11 vs. 12 cycles) because the CPU receives data directly from memory without waiting for a second cache read.
 - The **relative ranking** of LRU vs. MRU is unchanged between read policies — only absolute times shift.
 - **Non-Load-Through** is simpler to implement but adds one extra cycle per miss.
-- **Load-Through** is preferred when miss latency dominates and parallel memory-to-CPU paths exist.
+- **Load-Through** is preferred when miss latency dominates, and parallel memory-to-CPU paths exist.
 
 ### Overall Recommendations
 
@@ -201,6 +199,4 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 | Sequential scan | MRU | Load-Through |
 | Repeated/reverse patterns | MRU | Load-Through |
 | Random/uniform access | Either (no difference) | Load-Through |
-| General-purpose | LRU (industry standard) | Depends on hardware |
-
-> **Note:** While MRU wins on structured test patterns in this simulation, **LRU remains the industry default** because real workloads typically exhibit recency-based locality (loops, stacks, recent data structures) where LRU excels. MRU is specialized for specific access patterns like sequential scans through data larger than cache.
+| General-purpose | LRU  | Depends on hardware |
