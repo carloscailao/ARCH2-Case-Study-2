@@ -130,18 +130,18 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 
 | Metric | LRU | MRU |
 |--------|-----|-----|
-| Hits | 48 | 80 |
-| Misses | 112 | 80 |
-| Hit Rate | 30.0% | 50% |
-| Miss Rate | 70.0% | 50% |
-| AMAT (cycles) | 14.30 | 10.50 |
-| Total Time (cycles) | 2,288 | 1,680 |
+| Hits | 16 | 68 |
+| Misses | 144 | 92 |
+| Hit Rate | 10.0% | 42.5% |
+| Miss Rate | 90.0% | 57.5% |
+| AMAT (cycles) | 18.10 | 11.93 |
+| Total Time (cycles) | 2,896 | 1,908 |
 
 **Analysis:**
 
-- **MRU recorded 80 cache hits**, compared to 48 hits for LRU. The repeated forward and reverse access pattern allows older cache entries to remain useful, which benefits MRU's replacement strategy.
+- **MRU recorded 68 cache hits**, compared to 16 hits for LRU. The repeated forward and reverse access pattern allows older cache entries to remain useful, which benefits MRU's replacement strategy.
 - **LRU replaces blocks that are no longer the most recently used**, causing some blocks needed during the reverse sequence to be evicted before they are accessed again.
-- **AMAT improvement**: MRU reduces the average memory access time from 14.30 cycles to 10.50 cycles, lowering the total memory access time from 2,288 cycles to 1,680 cycles.
+- **AMAT improvement**: MRU reduces the average memory access time from 18.10 cycles to 11.93 cycles, lowering the total memory access time from 2,896 cycles to 1,908 cycles.
 - **Conclusion:** The **repeated and reverse access pattern** resulted in better performance for **MRU**.
 
 ---
@@ -207,7 +207,7 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 | Test Case | LRU AMAT (NL/T / LT) | MRU AMAT (NL/T / LT) |
 |-----------|----------------------|----------------------|
 | Sequential | 20.00 / 12.00 | 15.25 / 9.25 |
-| Mid-Repeat | 14.30 / 8.70 | 10.5 / 6.50 |
+| Mid-Repeat | 18.10 / 10.90 | 11.93 / 7.30 |
 | Random | 18.81 / 11.83 | 19.11 / 11.83 |
 
 **Analysis:**
@@ -225,3 +225,7 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 | Repeated/reverse patterns | MRU | Load-Through |
 | Random/uniform access | Either (no difference) | Load-Through |
 | General-purpose | LRU  | Depends on hardware |
+
+---
+## Video Walkthrough
+https://youtu.be/g6I7iwLIKbU
