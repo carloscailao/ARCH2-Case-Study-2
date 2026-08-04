@@ -128,13 +128,15 @@ export class CacheSimulator {
 
     if (this.readPolicy === 'load-through') {
       // Miss: check cache + fetch from memory in parallel; CPU gets data from memory
-      return TIMING.CACHE_HIT_TIME + TIMING.MEMORY_BLOCK_TIME;
+      return TIMING.CACHE_HIT_TIME + TIMING.MEMORY_BLOCK_TIME + TIMING.WORD_TRANSFER_TIME;
     }
+
+    const blockTransferTime = TIMING.MEMORY_BLOCK_TIME + this.blockSize * TIMING.WORD_TRANSFER_TIME
 
     // Non-load-through: miss penalty = cache check + full block fetch + cache read
     return (
       TIMING.CACHE_HIT_TIME +
-      TIMING.MEMORY_BLOCK_TIME +
+      blockTransferTime +
       TIMING.CACHE_HIT_TIME
     );
   }
