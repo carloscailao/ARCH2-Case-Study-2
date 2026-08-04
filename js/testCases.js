@@ -12,14 +12,10 @@ export function midRepeatSequence(numCacheBlocks) {
   const n = numCacheBlocks;
   const part1 = Array.from({ length: n }, (_, i) => i); // blocks 0..n-1
   const part2 = Array.from({ length: 2 * n }, (_, i) => i); // blocks 0..2n-1
+  const reversePart1 = [...part1].reverse();
+  const reversePart2 = [...part2].reverse();
 
-  // Forward pattern: 0..n-1, then 0..2n-1 twice.
-  const forward = [...part1, ...part2, ...part2];
-
-  // Backward pattern: 2n-1..0, 2n-1..0, n-1..0
-  const reversed = [...forward].reverse();
-
-  return [...forward, ...reversed];
+  return [...part1, ...part2, ...part2, ...reversePart1, ...reversePart2, ...reversePart2];
 }
 
 export function randomSequence(length = 64, memoryBlocks = 1024, seed = null) {
