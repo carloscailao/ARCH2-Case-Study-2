@@ -139,9 +139,9 @@ All results below use the default configuration: **16 cache blocks**, **8-word b
 
 **Analysis:**
 
-- **MRU recorded 68 cache hits**, compared to 16 hits for LRU. The repeated forward and reverse access pattern allows older cache entries to remain useful, which benefits MRU's replacement strategy.
+- **MRU recorded 80 cache hits**, compared to 48 hits for LRU. The repeated forward and reverse access pattern allows older cache entries to remain useful, which benefits MRU's replacement strategy.
 - **LRU replaces blocks that are no longer the most recently used**, causing some blocks needed during the reverse sequence to be evicted before they are accessed again.
-- **AMAT improvement**: MRU reduces the average memory access time from 10.90 cycles to 7.33 cycles, lowering the total memory access time from 1744 cycles to 1172 cycles.
+- **AMAT improvement**: MRU reduces the average memory access time from 14.30 cycles to 10.50 cycles, lowering the total memory access time from 2,288 cycles to 1,680 cycles.
 - **Conclusion:** The **repeated and reverse access pattern** resulted in better performance for **MRU**.
 
 ---
